@@ -1,0 +1,69 @@
+---
+title: "Starter Code"
+author: "Elvin Liu"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+# Install these if you haven't already
+# install.packages("tidyverse")
+# install.packages("readxl")
+library(tidyverse)
+library(readxl)
+```
+
+
+```{r}
+# Edit file name and path as needed
+psid_raw <- read_excel("J361958.xlsx")
+```
+
+```{r}
+# This creates a lookup table
+# 1999 uses ER33501
+# 2001 uses ER33601
+# 2003 uses ER33701
+# ...
+# 2023 uses ER35101
+id_crosswalk <- tibble(
+  year = c(1999, 2001, 2003, 2005, 2007, 2009, 2011,
+           2013, 2015, 2017, 2019, 2021, 2023),
+  
+  annual_family_id_var = c(
+    "ER33501", "ER33601", "ER33701", "ER33801", "ER33901",
+    "ER34001", "ER34101", "ER34201", "ER34301", "ER34501",
+    "ER34701", "ER34901", "ER35101"
+  )
+)
+```
+
+```{r}
+# Helper function
+make_person_year <- function(data, cw_row) {
+  tibble(
+    person_1968_family_id = data$ER30001,
+    person_number = data$ER30002,
+    person_id = paste0(data$ER30001, "_", data$ER30002),
+    
+    year = cw_row$year,
+    
+    family_id = data[[cw_row$annual_family_id_var]]
+  )
+}
+```
+
+```{r}
+# Stack into long person-year file
+person_family_year <- map_dfr(
+  seq_len(nrow(id_crosswalk)),
+  ~ make_person_year(psid_raw, id_crosswalk[.x, ])
+)
+```
+
+```{r}
+# Drop years where person is not associated with a responding family
+# The PSID guide notes that when a person is not associated with a responding family in a given year, the interview number can be filled with 0's
+person_family_year <- person_family_year %>%
+  filter(!is.na(family_id), family_id != 0)
+```
