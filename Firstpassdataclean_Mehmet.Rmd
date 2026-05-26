@@ -1,0 +1,68 @@
+---
+title: "first_pass_elvin"
+author: "Elvin Liu"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+
+```{r setup}
+setwd("C:\\Users\\mehme\\Downloads\\484 Project")
+library(labelled)
+```
+
+```{r}
+lines <- readLines("J362221_labels.txt")
+
+var_lines <- lines[grepl("^ER[0-9A-Z]+\\s+", lines)]
+
+label_df <- data.frame(
+  var   = trimws(sub("^(ER[0-9A-Z]+)\\s+.*$", "\\1", var_lines)),
+  label = trimws(sub("^ER[0-9A-Z]+\\s+(.*?)\\s{2,}\\d{0,2}\\s*$", "\\1", var_lines)),
+  stringsAsFactors = FALSE
+)
+```
+
+```{r}
+df <- read.csv("J362221.csv", stringsAsFactors = FALSE)
+for (i in seq_len(nrow(label_df))) {
+  v <- label_df$var[i]
+  if (v %in% names(df)) {
+    var_label(df[[v]]) <- label_df$label[i]
+  }
+}
+dim(df)
+```
+
+```{r 97 filtering}
+# Convert to NA values for 1997 whether TANF variable
+df$ER11272[df$ER11272 == 0 | df$ER11272 == 8 | df$ER11272 == 9] <- NA
+# Remove rows with NA in ER11272
+na_count_er11272 <- sum(is.na(df$ER11272))
+na_count_er11272
+df <- df[!is.na(df$ER11272), ]
+dim(df)
+# 1 is yes filter for ER11272
+df_TANF_yes <- df[df$ER11272 == 1, ]
+dim(df_TANF_yes)
+# Send 999999, 999998, 99999, 99998 Values to NA, not cleaned
+df[df == 999999 | df == 999998 | df == 99999 | df == 99998] <- NA
+# Send same vals to NA in df_TANF_yes
+df_TANF_yes[df_TANF_yes == 999999 | df_TANF_yes == 999998 | df_TANF_yes == 99999 | df_TANF_yes == 99998] <- NA
+
+# ER41027 <- Total Family Income 2007
+#  ER41029 <- Census Needs Standard 2007
+# ER12079 <- TFI 1997
+# ER12220 <- CNS 1997
+
+# Calculate Ratio for 1997 TFI and CNS
+df_TANF_yes$income_to_needs_ratio_1997 <- df_TANF_yes$ER12079 / df_TANF_yes$ER12220
+# Summary statistics for the 1997 income to needs ratio
+summary(df_TANF_yes$income_to_needs_ratio_1997)
+
+
+# Calculate Ratio of Total Family Income to Census Needs Standard in TANF YES group
+df_TANF_yes$income_to_needs_ratio <- df_TANF_yes$ER41027 / df_TANF_yes$ER41029
+# Summary statistics for the income to needs ratio
+summary(df_TANF_yes$income_to_needs_ratio)
+```
