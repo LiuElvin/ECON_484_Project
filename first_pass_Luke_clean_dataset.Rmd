@@ -1,0 +1,181 @@
+---
+title: "first_pass_elvin"
+author: "Elvin Liu"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup}
+library(labelled)
+```
+
+```{r}
+lines <- readLines("J362221_labels.txt")
+
+var_lines <- lines[grepl("^ER[0-9A-Z]+\\s+", lines)]
+
+label_df <- data.frame(
+  var   = trimws(sub("^(ER[0-9A-Z]+)\\s+.*$", "\\1", var_lines)),
+  label = trimws(sub("^ER[0-9A-Z]+\\s+(.*?)\\s{2,}\\d{0,2}\\s*$", "\\1", var_lines)),
+  stringsAsFactors = FALSE
+)
+```
+
+```{r}
+df <- read.csv("J362221.csv", stringsAsFactors = FALSE)
+
+for (i in seq_len(nrow(label_df))) {
+  v <- label_df$var[i]
+  if (v %in% names(df)) {
+    var_label(df[[v]]) <- label_df$label[i]
+  }
+}
+```
+
+```{r 13 Filtering}
+
+# Convert NA values for 2013 TANF variable
+df$ER54059[df$ER54059 == 0 | df$ER54059 == 8 | df$ER54059 == 9] <- NA
+
+# Remove rows with NA in ER54059
+df <- df[!is.na(df$ER54059), ]
+
+dim(df)
+
+# 1 is yes filter for ER54059
+df_TANF_yes_13 <- df[df$ER54059 == 1, ]
+
+dim(df_TANF_yes_13)
+nrow(df_TANF_yes_13)
+```
+```{r 97 filtering}
+# Convert to NA values for 1997 whether TANF variable
+df$ER11272[df$ER11272 == 0 | df$ER11272 == 8 | df$ER11272 == 9] <- NA
+# Remove rows with NA in ER11272
+na_count_er11272 <- sum(is.na(df$ER11272))
+na_count_er11272
+df <- df[!is.na(df$ER11272), ]
+dim(df)
+# 1 is yes filter for ER11272
+df_TANF_yes <- df[df$ER11272 == 1, ]
+dim(df_TANF_yes)
+# Send 999999, 999998, 99999, 99998 Values to NA, not cleaned
+df[df == 999999 | df == 999998 | df == 99999 | df == 99998] <- NA
+# Send same vals to NA in df_TANF_yes
+df_TANF_yes[df_TANF_yes == 999999 | df_TANF_yes == 999998 | df_TANF_yes == 99999 | df_TANF_yes == 99998] <- NA
+
+# ER41027 <- Total Family Income 2007
+#  ER41029 <- Census Needs Standard 2007
+# ER12079 <- TFI 1997
+# ER12220 <- CNS 1997
+
+# Calculate Ratio for 1997 TFI and CNS
+df_TANF_yes$income_to_needs_ratio_1997 <- df_TANF_yes$ER12079 / df_TANF_yes$ER12220
+# Summary statistics for the 1997 income to needs ratio
+summary(df_TANF_yes$income_to_needs_ratio_1997)
+
+
+# Calculate Ratio of Total Family Income to Census Needs Standard in TANF YES group
+df_TANF_yes$income_to_needs_ratio <- df_TANF_yes$ER41027 / df_TANF_yes$ER41029
+# Summary statistics for the income to needs ratio
+summary(df_TANF_yes$income_to_needs_ratio)
+```
+```{r}
+#Cleaning the NA values for all other variables
+
+## Identify all potential predictors from External Income Vars in Code book across all years
+external_income_yesno_vars <- c(
+
+  # TANF / AFDC
+  "ER11272", "ER14538", "ER18697", "ER22069", "ER26050",
+  "ER37068", "ER43059", "ER48381", "ER54059", "ER61101",
+  "ER67153", "ER73176", "ER79272", "ER83247",
+
+  # SSI
+  "ER11287", "ER14553", "ER18713", "ER22085", "ER26066",
+  "ER37084", "ER43075", "ER48397", "ER54075", "ER61117",
+  "ER67169", "ER73192", "ER79288", "ER83263",
+
+  # Other welfare
+  "ER11303", "ER14569", "ER18730", "ER22102", "ER26083",
+  "ER37101", "ER43092", "ER48414", "ER54092", "ER61134",
+  "ER67186", "ER73209", "ER79305", "ER83280",
+
+  # NON-VA retirement / pensions
+  "ER11336", "ER14602", "ER18765", "ER22135", "ER26116",
+  "ER37134", "ER43125", "ER48450", "ER54128", "ER61170",
+  "ER67222", "ER73245", "ER79341", "ER83316",
+
+  # Annuities
+  "ER11351", "ER14617", "ER18781", "ER22151", "ER26132",
+  "ER37150", "ER43141", "ER48466", "ER54144", "ER61186",
+  "ER67238", "ER73261", "ER79357", "ER83332",
+
+  # Other retirement income
+  "ER11366", "ER14632", "ER18797", "ER22167", "ER26148",
+  "ER37166", "ER43157", "ER48482", "ER54160", "ER61202",
+  "ER67254", "ER73277", "ER79373", "ER83348",
+
+  # Unemployment compensation
+  "ER11382", "ER14648", "ER18814", "ER22184", "ER26165",
+  "ER37183", "ER43174", "ER48499", "ER54193", "ER61235",
+  "ER67287", "ER73310", "ER79406", "ER83381",
+
+  # Workers compensation
+  "ER11397", "ER14663", "ER18830", "ER22200", "ER26181",
+  "ER37199", "ER43190", "ER48515", "ER54209", "ER61251",
+  "ER67303", "ER73326", "ER79422", "ER83397",
+
+  # Child support
+  "ER11412", "ER14678", "ER18846", "ER22216", "ER26197",
+  "ER37215", "ER43206", "ER48531", "ER54225", "ER61267",
+  "ER67319", "ER73342", "ER79444", "ER83413"
+)
+
+
+```
+
+```{r}
+# Apply Cleaning function to change 0, 8, and 9 variables and make them NA
+df[external_income_yesno_vars] <- lapply(
+  df[external_income_yesno_vars],
+  function(x) {
+    x[x %in% c(0, 8, 9)] <- NA
+    x
+  }
+)
+```
+
+```{r}
+# Check Above
+sapply(df[external_income_yesno_vars], table, useNA = "ifany")
+```
+
+```{r}
+# Do the same manually but for VA
+
+#1-4 are treated as 1, 8 and 9 as VA
+# VA whether received variables
+va_vars <- c(
+  "ER11319", "ER14585", "ER18747", "ER22119",
+  "ER26100", "ER37118", "ER43109"
+)
+
+# Clean VA variables
+df[va_vars] <- lapply(df[va_vars], function(x) {
+
+  # Convert any receipt category (1-4) into 1
+  x[x %in% c(1,2,3,4)] <- 1
+
+  # Convert DK / NA to missing
+  x[x %in% c(8,9)] <- NA
+
+  x
+})
+
+#Check
+sapply(df[va_vars], table, useNA = "ifany")
+```
+
+
+
