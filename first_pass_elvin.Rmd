@@ -6,12 +6,15 @@ output: pdf_document
 ---
 
 ```{r setup}
+library(dplyr)
+library(purrr)
+library(tidyr)
 library(labelled)
 ```
 
 ```{r}
+# map labels from txt to csv
 lines <- readLines("J362221_labels.txt")
-
 var_lines <- lines[grepl("^ER[0-9A-Z]+\\s+", lines)]
 
 label_df <- data.frame(
@@ -19,9 +22,7 @@ label_df <- data.frame(
   label = trimws(sub("^ER[0-9A-Z]+\\s+(.*?)\\s{2,}\\d{0,2}\\s*$", "\\1", var_lines)),
   stringsAsFactors = FALSE
 )
-```
 
-```{r}
 df <- read.csv("J362221.csv", stringsAsFactors = FALSE)
 
 for (i in seq_len(nrow(label_df))) {
@@ -30,4 +31,149 @@ for (i in seq_len(nrow(label_df))) {
     var_label(df[[v]]) <- label_df$label[i]
   }
 }
+```
+
+```{r}
+# get rid of dupe family heads
+df_no_dupes <- df %>%
+  group_by(ER10002) %>%
+  slice(1) %>%
+  ungroup()
+```
+
+```{r}
+# mapping from wide to long
+wave_map <- list(
+  "1997" = list(
+    # Tracking IDs
+    family_id      = "ER10002",
+    person_id      = "ER33401", # Added from your "ID Number" line
+    
+    # Demographics & Geography
+    state          = "ER12221",
+    age            = "ER10009",
+    sex            = "ER10010",
+    n_children     = "ER10012",
+    age_yng_child  = "ER10013",
+    race           = "ER11848",
+    education      = "ER12222",
+    couple_status  = "ER12223C",
+    relation       = "ER33403",
+    emp_status     = "ER33411",
+    rural_urban    = "ER12221A",
+    
+    # Housing
+    type_du        = "ER10017",
+    own_rent       = "ER10035",
+    neither_own_rent = "ER10068", # Clarified label
+    food_stamps    = "ER11065",
+    
+    # Health
+    health_head    = "ER11723",
+    health_wife    = "ER11727",
+    parents_poor   = "ER11846",
+    
+    # Income/Needs
+    total_income   = "ER12079",
+    needs_standard = "ER12220",
+    
+    # Transfer Income
+    wtr_adc        = "ER11272",
+    amt_adc        = "ER11273",
+    wtr_ssi        = "ER11287",
+    amt_ssi        = "ER11289",
+    wtr_welfare    = "ER11303",
+    amt_welfare    = "ER11304",
+    wtr_va         = "ER11319",
+    amt_va         = "ER11322",
+    wtr_nonva_ret  = "ER11336",
+    amt_nonva_ret  = "ER11337",
+    wtr_annuities  = "ER11351",
+    amt_annuities  = "ER11352",
+    wtr_otr_pen    = "ER11366",
+    amt_otr_pen    = "ER11367",
+    wtr_unemp      = "ER11382",
+    amt_unemp      = "ER11383",
+    wtr_workers_comp = "ER11397",
+    amt_workers_comp = "ER11398",
+    wtr_child_supp = "ER11412",
+    amt_child_supp = "ER11413"
+  ),
+  "1999" = list(
+    family_id      = "ER13002",
+    person_id      = "ER33501",
+    state          = "ER13004",
+    age            = "ER13010",
+    sex            = "ER13011",
+    n_children     = "ER13013",
+    age_yng_child  = "ER13014",
+    type_du        = "ER13022",
+    own_rent       = "ER13040",
+    neither_own_rent = "ER13073",
+    food_stamps    = "ER14284",
+    wtr_adc        = "ER14538",
+    amt_adc        = "ER14539",
+    wtr_ssi        = "ER14553",
+    amt_ssi        = "ER14555",
+    wtr_welfare    = "ER14569",
+    amt_welfare    = "ER14570",
+    wtr_va         = "ER14585",
+    amt_va         = "ER14588",
+    wtr_nonva_ret  = "ER14602",
+    amt_nonva_ret  = "ER14603",
+    wtr_annuities  = "ER14617",
+    amt_annuities  = "ER14618",
+    wtr_otr_pen    = "ER14632",
+    amt_otr_pen    = "ER14633",
+    wtr_unemp      = "ER14648",
+    amt_unemp      = "ER14649",
+    wtr_workers_comp = "ER14663",
+    amt_workers_comp = "ER14664",
+    wtr_child_supp = "ER14678",
+    amt_child_supp = "ER14679",
+    health_head    = "ER15447",
+    health_wife    = "ER15555",
+    parents_poor   = "ER15926",
+    race           = "ER15928",
+    couple_status  = "ER16425",
+    needs_standard = "ER16427",
+    rural_urban    = "ER16431",
+    total_income   = "ER16462",
+    education      = "ER16516",
+    relation       = "ER33503",
+    emp_status     = "ER33512"
+  )
+  # Repeat structural pattern for 2001-2007 blocks...
+)
+```
+
+```{r}
+# map from wide to long
+df_long <- names(wave_map) %>%
+  map_dfr(function(year) {
+    
+    # 1. Get the mapping for this specific year
+    year_mapping <- wave_map[[year]]
+    
+    # 2. Convert to a standard named character vector: c(clean_name = "ER_code")
+    rename_vec <- unlist(year_mapping)
+    
+    # 3. Filter to ensure every ER code in our map actually exists in the data
+    rename_vec <- rename_vec[rename_vec %in% names(df_no_dupes)]
+    
+    # 4. Invert the vector so it matches select's expected framework:
+    # select(clean_name = ER_code)
+    # To do this, we want the clean names to be the vector's NAMES, and ER codes to be the VALUES
+    select_vec <- setNames(rename_vec, names(rename_vec))
+    
+    # 5. Extract, reshape, and label
+    df_no_dupes %>%
+      # select() accepts a named vector where names = NEW name, values = OLD name
+      select(all_of(select_vec)) %>%
+      mutate(year = as.integer(year))
+  })
+
+# Move tracking keys and year to the front
+df_long <- df_long %>%
+  select(person_id, family_id, year, everything())
 ```
