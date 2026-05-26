@@ -1,0 +1,33 @@
+---
+title: "first_pass_elvin"
+author: "Elvin Liu"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup}
+library(labelled)
+```
+
+```{r}
+lines <- readLines("J362221_labels.txt")
+
+var_lines <- lines[grepl("^ER[0-9A-Z]+\\s+", lines)]
+
+label_df <- data.frame(
+  var   = trimws(sub("^(ER[0-9A-Z]+)\\s+.*$", "\\1", var_lines)),
+  label = trimws(sub("^ER[0-9A-Z]+\\s+(.*?)\\s{2,}\\d{0,2}\\s*$", "\\1", var_lines)),
+  stringsAsFactors = FALSE
+)
+```
+
+```{r}
+df <- read.csv("J362221.csv", stringsAsFactors = FALSE)
+
+for (i in seq_len(nrow(label_df))) {
+  v <- label_df$var[i]
+  if (v %in% names(df)) {
+    var_label(df[[v]]) <- label_df$label[i]
+  }
+}
+```
