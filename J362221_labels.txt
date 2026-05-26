@@ -1,0 +1,618 @@
+****** PSID DATA CENTER ************************* 
+****** Variable labels for JobID = 362221 ******* 
+
+Variable    Labels
+
+ER30000    RELEASE NUMBER                          
+ER30001    1968 INTERVIEW NUMBER                   
+ER30002    PERSON NUMBER                         68
+ER32000    SEX OF INDIVIDUAL                       
+ER32006    WHETHER SAMPLE OR NONSAMPLE             
+ER10001    RELEASE NUMBER                          
+ER10002    1997 INTERVIEW #                        
+ER10009    AGE OF HEAD                             
+ER10010    SEX OF HEAD                             
+ER10012    # CHILDREN IN FU                        
+ER10013    AGE YOUNGEST CHILD                      
+ER10017    A4 TYPE DU                              
+ER10035    A19 OWN/RENT OR WHAT                    
+ER10068    A38 IN PUBLIC OWND PROJ?                
+ER11065    F12 FOR HOW MANY PEOPLE                 
+ER11272    WHETHER ADC/AFDC HEAD                   
+ER11273    ADC/AFDC OF HEAD                        
+ER11287    WHETHER SSI HEAD                        
+ER11289    SSI OF HEAD                             
+ER11303    WHETHER OTHER WELFARE HD                
+ER11304    OTHER WELFARE OF HEAD                   
+ER11319    WHETHER HEAD VA PENSION                 
+ER11322    VA PENSION OF HEAD AMT                  
+ER11336    WTR NONVA RETIREMT-HEAD                 
+ER11337    NONVA RETIREMENT-HEAD                   
+ER11351    WHETHER HEAD ANNUITIES                  
+ER11352    ANNUITIES OF HEAD                       
+ER11366    WHETHER HEAD OTR PENSION                
+ER11367    OTHER PENSION OF HEAD                   
+ER11382    WTR UNEMPL COMP OF HEAD                 
+ER11383    AMT UNEMPL COMP OF HEAD                 
+ER11397    WTR WORKMEN COMP OF HEAD                
+ER11398    AMT WORKMEN COMP OF HEAD                
+ER11412    WTR CHILD SUPPORT OF HD                 
+ER11413    AMT CHILD SUPPORT OF HD                 
+ER11723    H1 STATUS OF HEALTH-HEAD                
+ER11727    H8 STATUS OF HEALTH-WIFE                
+ER11846    L38 PARENTS POOR OR? HD                 
+ER11848    L40/95 RACE OF HEAD 1                   
+ER12079    TOTAL FAMILY INCOME                     
+ER12220    CENSUS NEEDS STANDARD-1996              
+ER12221    PSID STATE OF RESIDENCE CODE            
+ER12221A   BEALE RURAL-URBAN CODE                  
+ER12222    COMPLETED ED-HD                         
+ER12223C   COUPLE STATUS OF HEAD                   
+ER33401    1997 INTERVIEW NUMBER                   
+ER33402    SEQUENCE NUMBER                       97
+ER33403    RELATION TO HEAD                      97
+ER33411    EMPLOYMENT STATUS                     97
+ER13001    RELEASE NUMBER                          
+ER13002    1999 FAMILY INTERVIEW (ID) NUMBER       
+ER13004    PSID STATE OF RESIDENCE CODE            
+ER13010    AGE OF HEAD                             
+ER13011    SEX OF HEAD                             
+ER13013    # CHILDREN IN FU                        
+ER13014    AGE YOUNGEST CHILD                      
+ER13022    A4 TYPE DU                              
+ER13040    A19 OWN/RENT OR WHAT                    
+ER13073    A38 IN PUBLIC OWND PROJ?                
+ER14284    F15 # FU MEMBERS RECEIVED FOOD STAMPS   
+ER14538    WHETHER ADC/AFDC HEAD                   
+ER14539    ADC/AFDC OF HEAD                        
+ER14553    WHETHER SSI HEAD                        
+ER14555    SSI OF HEAD                             
+ER14569    WHETHER OTHER WELFARE HD                
+ER14570    OTHER WELFARE OF HEAD                   
+ER14585    WHETHER HEAD VA PENSION                 
+ER14588    VA PENSION OF HEAD AMT                  
+ER14602    WTR NONVA RETIREMT-HEAD                 
+ER14603    NONVA RETIREMENT-HEAD                   
+ER14617    WHETHER HEAD ANNUITIES                  
+ER14618    ANNUITIES OF HEAD                       
+ER14632    WHETHER HEAD OTR PENSION                
+ER14633    OTHER PENSION OF HEAD                   
+ER14648    WTR UNEMPL COMP OF HEAD                 
+ER14649    AMT UNEMPL COMP OF HEAD                 
+ER14663    WTR WORKMEN COMP OF HEAD                
+ER14664    AMT WORKMEN COMP OF HEAD                
+ER14678    WTR CHILD SUPPORT OF HD                 
+ER14679    AMT CHILD SUPPORT OF HD                 
+ER15447    H1 STATUS OF HEALTH-HEAD                
+ER15555    H25 STATUS OF HEALTH                    
+ER15926    L39 PARENTS POOR OR? HD                 
+ER15928    L40/95 RACE OF HEAD 1                   
+ER16425    COUPLE STATUS OF HEAD                   
+ER16427    CENSUS NEEDS STANDARD-PREVIOUS YR       
+ER16431    BEALE RURAL-URBAN CODE                  
+ER16462    TOTAL FAMILY INCOME                     
+ER16516    COMPLETED ED-HD                         
+ER33501    1999 INTERVIEW NUMBER                   
+ER33502    SEQUENCE NUMBER                       99
+ER33503    RELATION TO HEAD                      99
+ER33512    EMPLOYMENT STATUS                     99
+ER17001    RELEASE NUMBER                          
+ER17002    2001 FAMILY INTERVIEW (ID) NUMBER       
+ER17004    PSID STATE OF RESIDENCE CODE            
+ER17013    AGE OF HEAD                             
+ER17014    SEX OF HEAD                             
+ER17016    # CHILDREN IN FU                        
+ER17017    AGE YOUNGEST CHILD                      
+ER17025    A4 TYPE DU                              
+ER17043    A19 OWN/RENT OR WHAT                    
+ER17084    A38 IN PUBLIC OWND PROJ?                
+ER18416    F15 # FU MEMBERS RECEIVED FOOD STAMPS   
+ER18697    WHETHER ADC/AFDC HEAD                   
+ER18698    ADC/AFDC OF HEAD                        
+ER18713    WHETHER SSI HEAD                        
+ER18715    SSI OF HEAD                             
+ER18730    WHETHER OTHER WELFARE HD                
+ER18731    OTHER WELFARE OF HEAD                   
+ER18747    WHETHER HEAD VA PENSION                 
+ER18750    VA PENSION OF HEAD AMT                  
+ER18765    WTR NONVA RETIREMT-HEAD                 
+ER18766    NONVA RETIREMENT-HEAD                   
+ER18781    WHETHER HEAD ANNUITIES                  
+ER18782    ANNUITIES OF HEAD                       
+ER18797    WHETHER HEAD OTR PENSION                
+ER18798    OTHER PENSION OF HEAD                   
+ER18814    WTR UNEMPL COMP OF HEAD                 
+ER18815    AMT UNEMPL COMP OF HEAD                 
+ER18830    WTR WORKMEN COMP OF HEAD                
+ER18831    AMT WORKMEN COMP OF HEAD                
+ER18846    WTR CHILD SUPPORT OF HD                 
+ER18847    AMT CHILD SUPPORT OF HD                 
+ER19612    H1 STATUS OF HEALTH-HEAD                
+ER19720    H25 STATUS OF HEALTH                    
+ER19987    L38 PARENTS POOR OR? HD                 
+ER19989    L40/95 RACE OF HEAD 1                   
+ER20371    COUPLE STATUS OF HEAD                   
+ER20373    CENSUS NEEDS STANDARD-PREVIOUS YR       
+ER20377    BEALE RURAL-URBAN CODE                  
+ER20456    TOTAL FAMILY INCOME-2000                
+ER20457    COMPLETED ED-HD                         
+ER33601    2001 INTERVIEW NUMBER                   
+ER33602    SEQUENCE NUMBER                       01
+ER33603    RELATION TO HEAD                      01
+ER33612    EMPLOYMENT STATUS                     01
+ER21001    RELEASE NUMBER                          
+ER21002    2003 FAMILY INTERVIEW (ID) NUMBER       
+ER21003    PSID STATE OF RESIDENCE CODE            
+ER21017    AGE OF HEAD                             
+ER21018    SEX OF HEAD                             
+ER21020    # CHILDREN IN FU                        
+ER21021    AGE YOUNGEST CHILD                      
+ER21024    A4 TYPE DU                              
+ER21042    A19 OWN/RENT OR WHAT                    
+ER21082    A38 IN PUBLIC OWND PROJ?                
+ER21681    F15 # FU MEMBERS RECEIVED FOOD STAMPS   
+ER22069    G25E WHETHER ADC/TANF HEAD              
+ER22070    ADC/TANF OF HEAD                        
+ER22085    G25F WHETHER SSI HEAD                   
+ER22087    SSI OF HEAD                             
+ER22102    G25G WHETHER OTHER WELFARE HD           
+ER22103    OTHER WELFARE OF HEAD                   
+ER22119    G37 WHETHER HEAD VA PENSION             
+ER22120    VA PENSION OF HEAD AMT                  
+ER22135    G40A WTR NONVA RETIREMT-HEAD            
+ER22136    NONVA RETIREMENT-HEAD                   
+ER22151    G40B WHETHER HEAD ANNUITIES             
+ER22152    ANNUITIES OF HEAD                       
+ER22167    G40C WHETHER HEAD OTR PENSION           
+ER22168    OTHER PENSION OF HEAD                   
+ER22184    G44A WTR UNEMPL COMP OF HEAD            
+ER22185    AMT UNEMPL COMP OF HEAD                 
+ER22200    G44B WTR WORKMEN COMP OF HEAD           
+ER22201    AMT WORKMEN COMP OF HEAD                
+ER22216    G44C WTR CHILD SUPPORT OF HD            
+ER22217    AMT CHILD SUPPORT OF HD                 
+ER23009    H1 HEALTH STATUS-HEAD                   
+ER23136    H25 HEALTH STATUS-WIFE                  
+ER23424    L38 PARENTS POOR OR? HD                 
+ER23426    L40/95 RACE OF HEAD 1                   
+ER24099    TOTAL FAMILY INCOME LAST YEAR           
+ER24140    CENSUS NEEDS STANDARD-PREVIOUS YR       
+ER24144    BEALE RURAL-URBAN CODE                  
+ER24148    COMPLETED ED-HD                         
+ER24152    COUPLE STATUS OF HEAD                   
+ER33701    2003 INTERVIEW NUMBER                   
+ER33702    SEQUENCE NUMBER                       03
+ER33703    RELATION TO HEAD                      03
+ER33712    EMPLOYMENT STATUS                     03
+ER25001    RELEASE NUMBER                          
+ER25002    2005 FAMILY INTERVIEW (ID) NUMBER       
+ER25003    PSID STATE OF RESIDENCE CODE            
+ER25017    AGE OF HEAD                             
+ER25018    SEX OF HEAD                             
+ER25020    # CHILDREN IN FU                        
+ER25021    AGE YOUNGEST CHILD                      
+ER25024    A4 TYPE DU                              
+ER25028    A19 OWN/RENT OR WHAT                    
+ER25073    A36 IN PUBLIC OWND PROJ?                
+ER25683    F15 # FU MEMBERS RECEIVED FOOD STAMPS   
+ER26050    G25E WHETHER ADC/TANF HEAD              
+ER26051    ADC/TANF OF HEAD                        
+ER26066    G25F WHETHER SSI HEAD                   
+ER26068    SSI OF HEAD                             
+ER26083    G25G WHETHER OTHER WELFARE HD           
+ER26084    OTHER WELFARE OF HEAD                   
+ER26100    G37 WHETHER HEAD VA PENSION             
+ER26101    VA PENSION OF HEAD AMT                  
+ER26116    G40A WTR NONVA RETIREMT-HEAD            
+ER26117    NONVA RETIREMENT-HEAD                   
+ER26132    G40B WHETHER HEAD ANNUITIES             
+ER26133    ANNUITIES OF HEAD                       
+ER26148    G40C WHETHER HEAD OTR PENSION           
+ER26149    OTHER PENSION OF HEAD                   
+ER26165    G44A WTR UNEMPL COMP OF HEAD            
+ER26166    AMT UNEMPL COMP OF HEAD                 
+ER26181    G44B WTR WORKMEN COMP OF HEAD           
+ER26182    AMT WORKMEN COMP OF HEAD                
+ER26197    G44C WTR CHILD SUPPORT OF HD            
+ER26198    AMT CHILD SUPPORT OF HD                 
+ER26990    H1 HEALTH STATUS-HEAD                   
+ER27113    H25 HEALTH STATUS-WIFE                  
+ER27390    L38 PARENTS POOR OR?-HD                 
+ER27393    L40 RACE OF HEAD-MENTION 1              
+ER28037    TOTAL FAMILY INCOME-2004                
+ER28039    CENSUS NEEDS STANDARD-2004              
+ER28043    BEALE RURAL-URBAN CODE                  
+ER28047    COMPLETED ED-HD                         
+ER28051    COUPLE STATUS OF HEAD                   
+ER33801    2005 INTERVIEW NUMBER                   
+ER33802    SEQUENCE NUMBER                       05
+ER33803    RELATION TO HEAD                      05
+ER33813    EMPLOYMENT STATUS                     05
+ER36001    RELEASE NUMBER                          
+ER36002    2007 FAMILY INTERVIEW (ID) NUMBER       
+ER36003    PSID STATE OF RESIDENCE CODE            
+ER36017    AGE OF HEAD                             
+ER36018    SEX OF HEAD                             
+ER36020    # CHILDREN IN FU                        
+ER36021    AGE YOUNGEST CHILD                      
+ER36024    A4 TYPE DU                              
+ER36028    A19 OWN/RENT OR WHAT                    
+ER36075    A36 IN PUBLIC OWND PROJ?                
+ER36701    F15 # FU MEMBERS RECEIVED FOOD STAMPS   
+ER37068    G25E WHETHER ADC/TANF HEAD              
+ER37069    ADC/TANF OF HEAD                        
+ER37084    G25F WHETHER SSI HEAD                   
+ER37086    SSI OF HEAD                             
+ER37101    G25G WHETHER OTHER WELFARE HD           
+ER37102    OTHER WELFARE OF HEAD                   
+ER37118    G37 WHETHER HEAD VA PENSION             
+ER37119    VA PENSION OF HEAD AMT                  
+ER37134    G40A WTR NONVA RETIREMT-HEAD            
+ER37135    NONVA RETIREMENT-HEAD                   
+ER37150    G40B WHETHER HEAD ANNUITIES             
+ER37151    ANNUITIES OF HEAD                       
+ER37166    G40C WHETHER HEAD OTR PENSION           
+ER37167    OTHER PENSION OF HEAD                   
+ER37183    G44A WTR UNEMPL COMP OF HEAD            
+ER37184    AMT UNEMPL COMP OF HEAD                 
+ER37199    G44B WTR WORKMEN COMP OF HEAD           
+ER37200    AMT WORKMEN COMP OF HEAD                
+ER37215    G44C WTR CHILD SUPPORT OF HD            
+ER37216    AMT CHILD SUPPORT OF HD                 
+ER37728    W135 PARENTS POOR OR?--HD               
+ER38202    H1 HEALTH STATUS-HEAD                   
+ER39299    H1 HEALTH STATUS-WIFE                   
+ER40565    L40 RACE OF HEAD-MENTION 1              
+ER41027    TOTAL FAMILY INCOME-2006                
+ER41029    CENSUS NEEDS STANDARD-2006              
+ER41033    BEALE RURAL-URBAN CODE                  
+ER41037    COMPLETED ED-HD                         
+ER41041    COUPLE STATUS OF HEAD                   
+ER33901    2007 INTERVIEW NUMBER                   
+ER33902    SEQUENCE NUMBER                       07
+ER33903    RELATION TO HEAD                      07
+ER33913    EMPLOYMENT STATUS                     07
+ER42001    RELEASE NUMBER                          
+ER42002    2009 FAMILY INTERVIEW (ID) NUMBER       
+ER42003    PSID STATE OF RESIDENCE CODE            
+ER42017    AGE OF HEAD                             
+ER42018    SEX OF HEAD                             
+ER42020    # CHILDREN IN FU                        
+ER42021    AGE YOUNGEST CHILD                      
+ER42025    A4 TYPE DU                              
+ER42029    A19 OWN/RENT OR WHAT                    
+ER42090    A36 IN PUBLIC OWND PROJ?                
+ER42708    F15 # FU MEMBERS RECEIVED FOOD STAMPS   
+ER43059    G25E WHETHER ADC/TANF HEAD              
+ER43060    ADC/TANF OF HEAD                        
+ER43075    G25F WHETHER SSI HEAD                   
+ER43077    SSI OF HEAD                             
+ER43092    G25G WHETHER OTHER WELFARE HD           
+ER43093    OTHER WELFARE OF HEAD                   
+ER43109    G37 WHETHER HEAD VA PENSION             
+ER43110    VA PENSION OF HEAD AMT                  
+ER43125    G40A WTR NONVA RETIREMT-HEAD            
+ER43126    NONVA RETIREMENT-HEAD                   
+ER43141    G40B WHETHER HEAD ANNUITIES             
+ER43142    ANNUITIES OF HEAD                       
+ER43157    G40C WHETHER HEAD OTR PENSION           
+ER43158    OTHER PENSION OF HEAD                   
+ER43174    G44A WTR UNEMPL COMP OF HEAD            
+ER43175    AMT UNEMPL COMP OF HEAD                 
+ER43190    G44B WTR WORKMEN COMP OF HEAD           
+ER43191    AMT WORKMEN COMP OF HEAD                
+ER43206    G44C WTR CHILD SUPPORT OF HD            
+ER43207    AMT CHILD SUPPORT OF HD                 
+ER44175    H1 HEALTH STATUS-HEAD                   
+ER45272    H1 HEALTH STATUS-WIFE                   
+ER46540    L37 PARENTS POOR OR?--HD                
+ER46543    L40 RACE OF HEAD-MENTION 1              
+ER46935    TOTAL FAMILY INCOME-2008                
+ER46972    CENSUS NEEDS STANDARD-2008              
+ER46975    BEALE RURAL-URBAN CODE                  
+ER46981    COMPLETED ED-HD                         
+ER46985    COUPLE STATUS OF HEAD                   
+ER34001    2009 INTERVIEW NUMBER                   
+ER34002    SEQUENCE NUMBER                       09
+ER34003    RELATION TO HEAD                      09
+ER34016    EMPLOYMENT STATUS                     09
+ER47301    RELEASE NUMBER                          
+ER47302    2011 FAMILY INTERVIEW (ID) NUMBER       
+ER47303    PSID STATE OF RESIDENCE CODE            
+ER47317    AGE OF HEAD                             
+ER47318    SEX OF HEAD                             
+ER47320    # CHILDREN IN FU                        
+ER47321    AGE YOUNGEST CHILD                      
+ER47325    A4 TYPE DU                              
+ER47329    A19 OWN/RENT OR WHAT                    
+ER47398    A36 IN PUBLIC OWND PROJ?                
+ER48024    F15 # FU MEMBERS RECEIVED FOOD STAMPS   
+ER48381    G25E WHETHER ADC/TANF HEAD              
+ER48382    ADC/TANF OF HEAD                        
+ER48397    G25F WHETHER SSI HEAD                   
+ER48399    SSI OF HEAD                             
+ER48414    G25G WHETHER OTHER WELFARE HD           
+ER48415    OTHER WELFARE OF HEAD                   
+ER48435    VA PENSION OF HEAD AMT                  
+ER48450    G40A WTR NONVA RETIREMT-HEAD            
+ER48451    NONVA RETIREMENT-HEAD                   
+ER48466    G40B WHETHER HEAD ANNUITIES             
+ER48467    ANNUITIES OF HEAD                       
+ER48482    G40C WHETHER HEAD OTR PENSION           
+ER48483    OTHER PENSION OF HEAD                   
+ER48499    G44A WTR UNEMPL COMP OF HEAD            
+ER48500    AMT UNEMPL COMP OF HEAD                 
+ER48515    G44B WTR WORKMEN COMP OF HEAD           
+ER48516    AMT WORKMEN COMP OF HEAD                
+ER48531    G44C WTR CHILD SUPPORT OF HD            
+ER48532    AMT CHILD SUPPORT OF HD                 
+ER49494    H1 HEALTH STATUS-HEAD                   
+ER50612    H1 HEALTH STATUS-WIFE                   
+ER51901    L37 PARENTS POOR OR?--HD                
+ER51904    L40 RACE OF HEAD-MENTION 1              
+ER52343    TOTAL FAMILY INCOME-2010                
+ER52396    CENSUS NEEDS STANDARD-2010              
+ER52399    BEALE RURAL-URBAN CODE                  
+ER52405    COMPLETED ED-HD                         
+ER52409    COUPLE STATUS OF HEAD                   
+ER34101    2011 INTERVIEW NUMBER                   
+ER34102    SEQUENCE NUMBER                       11
+ER34103    RELATION TO HEAD                      11
+ER34116    EMPLOYMENT STATUS                     11
+ER53001    RELEASE NUMBER                          
+ER53002    2013 FAMILY INTERVIEW (ID) NUMBER       
+ER53003    PSID STATE OF RESIDENCE CODE            
+ER53017    AGE OF HEAD                             
+ER53018    SEX OF HEAD                             
+ER53020    # CHILDREN IN FU                        
+ER53021    AGE YOUNGEST CHILD                      
+ER53025    A4 TYPE DU                              
+ER53029    A19 OWN/RENT OR WHAT                    
+ER53098    A36 IN PUBLIC OWND PROJ?                
+ER53721    F15 # FU MEMBERS RECEIVED FOOD STAMPS   
+ER54059    G25E WHETHER ADC/TANF INCOME-HEAD       
+ER54060    AMOUNT ADC/TANF INCOME-HEAD             
+ER54075    G25F WHETHER SSI INCOME-HEAD            
+ER54077    AMOUNT SSI INCOME-HEAD                  
+ER54092    G25G WTR OTHER WELFARE INCOME-HEAD      
+ER54093    AMOUNT OTHER WELFARE INCOME-HEAD        
+ER54113    AMOUNT VA PENSION INCOME-HEAD           
+ER54128    G40A WTR NONVA RETIREMT-HEAD            
+ER54129    AMOUNT NONVA RETIREMENT-HEAD            
+ER54144    G40B WTR ANNUITIES INCOME-HEAD          
+ER54145    AMOUNT ANNUITIES INCOME-HEAD            
+ER54160    G40C WTR OTR PENSION INCOME-HEAD        
+ER54161    AMOUNT OTR PENSION INCOME-HEAD          
+ER54193    G44A WTR UNEMPLOY COMP-HEAD             
+ER54194    AMOUNT UNEMPLOY COMP-HEAD               
+ER54209    G44B WTR WORKERS COMP-HEAD              
+ER54210    AMOUNT WORKERS COMP-HEAD                
+ER54225    G44C WTR CHILD SUPPORT INCOME-HEAD      
+ER54226    AMOUNT CHILD SUPPORT INCOME-HEAD        
+ER55244    H1 HEALTH STATUS-HEAD                   
+ER56360    H1 HEALTH STATUS-WIFE                   
+ER57656    L37 PARENTS POOR OR?--HD                
+ER57659    L40 RACE OF HEAD-MENTION 1              
+ER58152    TOTAL FAMILY INCOME-2012                
+ER58213    CENSUS NEEDS STANDARD-2012              
+ER58217    BEALE RURAL-URBAN CODE                  
+ER58223    COMPLETED ED-HD                         
+ER58227    COUPLE STATUS OF HEAD                   
+ER34201    2013 INTERVIEW NUMBER                   
+ER34202    SEQUENCE NUMBER                       13
+ER34203    RELATION TO HEAD                      13
+ER34216    EMPLOYMENT STATUS                     13
+ER60001    RELEASE NUMBER                          
+ER60002    2015 FAMILY INTERVIEW (ID) NUMBER       
+ER60003    PSID STATE OF RESIDENCE CODE            
+ER60017    AGE OF HEAD                             
+ER60018    SEX OF HEAD                             
+ER60021    # CHILDREN IN FU                        
+ER60022    AGE YOUNGEST CHILD                      
+ER60026    A4 TYPE DU                              
+ER60030    A19 OWN/RENT OR WHAT                    
+ER60099    A36 IN PUBLIC OWND PROJ?                
+ER60736    F15 # FU MEMBERS RECEIVED FOOD STAMPS   
+ER61101    G25E WHETHER ADC/TANF INCOME-HEAD       
+ER61102    AMOUNT ADC/TANF INCOME-HEAD             
+ER61117    G25F WHETHER SSI INCOME-HEAD            
+ER61119    AMOUNT SSI INCOME-HEAD                  
+ER61134    G25G WTR OTHER WELFARE INCOME-HEAD      
+ER61135    AMOUNT OTHER WELFARE INCOME-HEAD        
+ER61155    AMOUNT VA PENSION INCOME-HEAD           
+ER61170    G40A WTR NONVA RETIREMT-HEAD            
+ER61171    AMOUNT NONVA RETIREMENT-HEAD            
+ER61186    G40B WTR ANNUITIES INCOME-HEAD          
+ER61187    AMOUNT ANNUITIES INCOME-HEAD            
+ER61202    G40C WTR OTR PENSION INCOME-HEAD        
+ER61203    AMOUNT OTR PENSION INCOME-HEAD          
+ER61235    G44A WTR UNEMPLOY COMP-HEAD             
+ER61236    AMOUNT UNEMPLOY COMP-HEAD               
+ER61251    G44B WTR WORKERS COMP-HEAD              
+ER61252    AMOUNT WORKERS COMP-HEAD                
+ER61267    G44C WTR CHILD SUPPORT INCOME-HEAD      
+ER61268    AMOUNT CHILD SUPPORT INCOME-HEAD        
+ER62366    H1 HEALTH STATUS-HEAD                   
+ER63482    H1 HEALTH STATUS-SPOUSE                 
+ER64807    L37 PARENTS POOR OR?--HD                
+ER64810    L40 RACE OF HEAD-MENTION 1              
+ER65349    TOTAL FAMILY INCOME-2014                
+ER65449    CENSUS NEEDS STANDARD-2014              
+ER65453    BEALE RURAL-URBAN CODE                  
+ER65459    COMPLETED ED-HD                         
+ER65463    COUPLE STATUS OF HEAD                   
+ER34301    2015 INTERVIEW NUMBER                   
+ER34302    SEQUENCE NUMBER                       15
+ER34303    RELATION TO HEAD                      15
+ER34317    EMPLOYMENT STATUS                     15
+ER66001    RELEASE NUMBER                          
+ER66002    2017 FAMILY INTERVIEW (ID) NUMBER       
+ER66003    PSID STATE OF RESIDENCE CODE            
+ER66017    AGE OF REFERENCE PERSON                 
+ER66018    SEX OF REFERENCE PERSON                 
+ER66021    # CHILDREN IN FU                        
+ER66022    AGE YOUNGEST CHILD                      
+ER66026    A4 TYPE DU                              
+ER66030    A19 OWN/RENT OR WHAT                    
+ER66101    A36 IN PUBLIC OWND PROJ?                
+ER66783    F15 # FU MEMBERS RECEIVED FOOD STAMPS   
+ER67153    G25E WHETHER ADC/TANF INCOME-RP         
+ER67154    AMOUNT ADC/TANF INCOME-RP               
+ER67169    G25F WHETHER SSI INCOME-RP              
+ER67171    AMOUNT SSI INCOME-RP                    
+ER67186    G25G WTR OTHER WELFARE INCOME-RP        
+ER67187    AMOUNT OTHER WELFARE INCOME-RP          
+ER67207    AMOUNT VA PENSION INCOME-RP             
+ER67222    G40A WTR NONVA RETIREMT-RP              
+ER67223    AMOUNT NONVA RETIREMENT-RP              
+ER67238    G40B WTR ANNUITIES INCOME-RP            
+ER67239    AMOUNT ANNUITIES INCOME-RP              
+ER67254    G40C WTR OTR PENSION INCOME-RP          
+ER67255    AMOUNT OTR PENSION INCOME-RP            
+ER67287    G44A WTR UNEMPLOY COMP-RP               
+ER67288    AMOUNT UNEMPLOY COMP-RP                 
+ER67303    G44B WTR WORKERS COMP-RP                
+ER67304    AMOUNT WORKERS COMP-RP                  
+ER67319    G44C WTR CHILD SUPPORT INCOME-RP        
+ER67320    AMOUNT CHILD SUPPORT INCOME-RP          
+ER68420    H1 HEALTH STATUS-RP                     
+ER69547    H1 HEALTH STATUS-SPOUSE                 
+ER70879    L37 PARENTS POOR OR?--RP                
+ER70882    L40 RACE OF REFERENCE PERSON-MENTION 1  
+ER71426    TOTAL FAMILY INCOME-2016                
+ER71528    CENSUS NEEDS STANDARD-2016              
+ER71532    BEALE RURAL-URBAN CODE                  
+ER71538    COMPLETED ED-RP                         
+ER71542    COUPLE STATUS OF REF PERSON             
+ER34501    2017 INTERVIEW NUMBER                   
+ER34502    SEQUENCE NUMBER                       17
+ER34503    RELATION TO REFERENCE PERSON          17
+ER34516    EMPLOYMENT STATUS                     17
+ER72001    RELEASE NUMBER                          
+ER72002    2019 FAMILY INTERVIEW (ID) NUMBER       
+ER72003    PSID STATE OF RESIDENCE CODE            
+ER72017    AGE OF REFERENCE PERSON                 
+ER72018    SEX OF REFERENCE PERSON                 
+ER72021    # CHILDREN IN FU                        
+ER72022    AGE YOUNGEST CHILD                      
+ER72026    A4 TYPE DU                              
+ER72030    A19 OWN/RENT OR WHAT                    
+ER72101    A36 IN PUBLIC OWND PROJ?                
+ER72787    F15 # FU MEMBERS RECEIVED FOOD STAMPS   
+ER73176    G25E WHETHER ADC/TANF INCOME-RP         
+ER73177    AMOUNT ADC/TANF INCOME-RP               
+ER73192    G25F WHETHER SSI INCOME-RP              
+ER73194    AMOUNT SSI INCOME-RP                    
+ER73209    G25G WTR OTHER WELFARE INCOME-RP        
+ER73210    AMOUNT OTHER WELFARE INCOME-RP          
+ER73230    AMOUNT VA PENSION INCOME-RP             
+ER73245    G40A WTR NONVA RETIREMT-RP              
+ER73246    AMOUNT NONVA RETIREMENT-RP              
+ER73261    G40B WTR ANNUITIES INCOME-RP            
+ER73262    AMOUNT ANNUITIES INCOME-RP              
+ER73277    G40C WTR OTR PENSION INCOME-RP          
+ER73278    AMOUNT OTR PENSION INCOME-RP            
+ER73310    G44A WTR UNEMPLOY COMP-RP               
+ER73311    AMOUNT UNEMPLOY COMP-RP                 
+ER73326    G44B WTR WORKERS COMP-RP                
+ER73327    AMOUNT WORKERS COMP-RP                  
+ER73342    G44C WTR CHILD SUPPORT INCOME-RP        
+ER73343    AMOUNT CHILD SUPPORT INCOME-RP          
+ER74428    H1 HEALTH STATUS-RP                     
+ER75555    H1 HEALTH STATUS-SPOUSE                 
+ER76894    L37 PARENTS POOR OR?--RP                
+ER76897    L40 RACE OF REFERENCE PERSON-MENTION 1  
+ER77448    TOTAL FAMILY INCOME-2018                
+ER77589    CENSUS NEEDS STANDARD-2018              
+ER77599    COMPLETED ED-RP                         
+ER77603    COUPLE STATUS OF REF PERSON             
+ER34701    2019 INTERVIEW NUMBER                   
+ER34702    SEQUENCE NUMBER                       19
+ER34703    RELATION TO REFERENCE PERSON          19
+ER34716    EMPLOYMENT STATUS                     19
+ER78001    RELEASE NUMBER                          
+ER78002    2021 FAMILY INTERVIEW (ID) NUMBER       
+ER78003    PSID STATE OF RESIDENCE CODE            
+ER78017    AGE OF REFERENCE PERSON                 
+ER78018    SEX OF REFERENCE PERSON                 
+ER78021    # CHILDREN IN FU                        
+ER78022    AGE YOUNGEST CHILD                      
+ER78027    A4 TYPE DU                              
+ER78031    A19 OWN/RENT OR WHAT                    
+ER78102    A36 IN PUBLIC OWND PROJ?                
+ER78864    F15 # FU MEMBERS RECEIVED FOOD STAMPS   
+ER79272    G25E WHETHER ADC/TANF INCOME-RP         
+ER79273    AMOUNT ADC/TANF INCOME-RP               
+ER79288    G25F WHETHER SSI INCOME-RP              
+ER79290    AMOUNT SSI INCOME-RP                    
+ER79305    G25G WTR OTHER WELFARE INCOME-RP        
+ER79306    AMOUNT OTHER WELFARE INCOME-RP          
+ER79326    AMOUNT VA PENSION INCOME-RP             
+ER79341    G40A WTR NONVA RETIREMT-RP              
+ER79342    AMOUNT NONVA RETIREMENT-RP              
+ER79357    G40B WTR ANNUITIES INCOME-RP            
+ER79358    AMOUNT ANNUITIES INCOME-RP              
+ER79373    G40C WTR OTR PENSION INCOME-RP          
+ER79374    AMOUNT OTR PENSION INCOME-RP            
+ER79406    G44A WTR UNEMPLOY COMP-RP               
+ER79407    AMOUNT UNEMPLOY COMP-RP                 
+ER79422    G44B WTR WORKERS COMP-RP                
+ER79423    AMOUNT WORKERS COMP-RP                  
+ER79444    G44C WTR CHILD SUPPORT INCOME-RP        
+ER79445    AMOUNT CHILD SUPPORT INCOME-RP          
+ER80550    H1 HEALTH STATUS-RP                     
+ER80748    H1 HEALTH STATUS-SPOUSE                 
+ER81141    L37 PARENTS POOR OR?--RP                
+ER81144    L40 RACE OF REFERENCE PERSON-MENTION 1  
+ER81775    TOTAL FAMILY INCOME-2020                
+ER81916    CENSUS NEEDS STANDARD-2020              
+ER81926    COMPLETED ED-RP                         
+ER81930    COUPLE STATUS OF REF PERSON             
+ER34901    2021 INTERVIEW NUMBER                   
+ER34902    SEQUENCE NUMBER                       21
+ER34903    RELATION TO REFERENCE PERSON          21
+ER34916    EMPLOYMENT STATUS                     21
+ER82001    RELEASE NUMBER                          
+ER82002    2023 FAMILY INTERVIEW (ID) NUMBER       
+ER82003    PSID STATE OF RESIDENCE CODE            
+ER82018    AGE OF REFERENCE PERSON                 
+ER82019    SEX OF REFERENCE PERSON                 
+ER82022    # CHILDREN IN FU                        
+ER82023    AGE YOUNGEST CHILD                      
+ER82028    A4 TYPE DU                              
+ER82032    A19 OWN/RENT OR WHAT                    
+ER82103    A36 IN PUBLIC OWND PROJ?                
+ER82857    F15 # FU MEMBERS RECEIVED FOOD STAMPS   
+ER83247    G25E WHETHER ADC/TANF INCOME-RP         
+ER83248    AMOUNT ADC/TANF INCOME-RP               
+ER83263    G25F WHETHER SSI INCOME-RP              
+ER83265    AMOUNT SSI INCOME-RP                    
+ER83280    G25G WTR OTHER WELFARE INCOME-RP        
+ER83281    AMOUNT OTHER WELFARE INCOME-RP          
+ER83301    AMOUNT VA PENSION INCOME-RP             
+ER83316    G40A WTR NONVA RETIREMT-RP              
+ER83317    AMOUNT NONVA RETIREMENT-RP              
+ER83332    G40B WTR ANNUITIES INCOME-RP            
+ER83333    AMOUNT ANNUITIES INCOME-RP              
+ER83348    G40C WTR OTR PENSION INCOME-RP          
+ER83349    AMOUNT OTR PENSION INCOME-RP            
+ER83381    G44A WTR UNEMPLOY COMP-RP               
+ER83382    AMOUNT UNEMPLOY COMP-RP                 
+ER83397    G44B WTR WORKERS COMP-RP                
+ER83398    AMOUNT WORKERS COMP-RP                  
+ER83413    G44C WTR CHILD SUPPORT INCOME-RP        
+ER83414    AMOUNT CHILD SUPPORT INCOME-RP          
+ER84520    H1 HEALTH STATUS-RP                     
+ER84721    H1 HEALTH STATUS-SPOUSE                 
+ER85118    L37 PARENTS POOR OR?--RP                
+ER85121    L40 RACE OF REFERENCE PERSON-MENTION 1  
+ER85629    TOTAL FAMILY INCOME-2022                
+ER85770    CENSUS NEEDS STANDARD-2022              
+ER85780    COMPLETED ED-RP                         
+ER85784    COUPLE STATUS OF REF PERSON             
+ER35101    2023 INTERVIEW NUMBER                   
+ER35102    SEQUENCE NUMBER                       23
+ER35103    RELATION TO REFERENCE PERSON          23
+ER35116    EMPLOYMENT STATUS                     23
+
+*** End of labels ******************************* 
