@@ -143,10 +143,10 @@ wave_map <- list(
     relation       = "ER33503",
     emp_status     = "ER33512"
   ),
-  # Repeat structural pattern for 2001-2007 blocks...
+  # Repeat structural pattern for 2001-2007 blocks... - Elvin
   "2001" = list(
     family_id      = "ER17002",
-    person_id      = "ER33601",
+    person_id      = "ER33601", # note: YYYY interview number
     state          = "ER17004",
     age            = "ER17013",
     sex            = "ER17014",
@@ -161,7 +161,7 @@ wave_map <- list(
     wtr_ssi        = "ER18715",
     amt_ssi        = "ER18715",
     wtr_welfare    = "ER18730",
-    amt_welfare    = "ER18731",
+    amt_welfare    = "ER18731", # note: Other Welfare of Head ?= amount of welfare
     wtr_va         = "ER18747",
     amt_va         = "ER18750",
     wtr_nonva_ret  = "ER18765",
@@ -169,7 +169,7 @@ wave_map <- list(
     wtr_annuities  = "ER18781",
     amt_annuities  = "ER18782",
     wtr_otr_pen    = "ER18797",
-    amt_otr_pen    = "ER18798",
+    amt_otr_pen    = "ER18798", # note: Other OTR Pension ?= amount of otr pension
     wtr_unemp      = "ER18814",
     amt_unemp      = "ER18815",
     wtr_workers_comp = "ER18830",
@@ -187,7 +187,53 @@ wave_map <- list(
     education      = "ER20457",
     relation       = "ER33603",
     emp_status     = "ER33612"
-  )
+  ),
+  "2003" = list(
+    family_id      = "ER21002",
+    person_id      = "ER33701", 
+    state          = "ER21003",
+    age            = "ER21017",
+    sex            = "ER21018",
+    n_children     = "ER21020",
+    age_yng_child  = "ER21021",
+    type_du        = "ER21024",
+    own_rent       = "ER21042",
+    neither_own_rent = "ER21082",
+    food_stamps    = "ER21681",
+    wtr_adc        = "ER22069",
+    amt_adc        = "ER22070",
+    wtr_ssi        = "ER22085",
+    amt_ssi        = "ER22087",
+    wtr_welfare    = "ER22102",
+    amt_welfare    = "ER22103",
+    wtr_va         = "ER22119",
+    amt_va         = "ER22120",
+    wtr_nonva_ret  = "ER22135",
+    amt_nonva_ret  = "ER2213",
+    wtr_annuities  = "ER22151",
+    amt_annuities  = "ER22152",
+    wtr_otr_pen    = "ER22167",
+    amt_otr_pen    = "ER22168",
+    wtr_unemp      = "ER22184",
+    amt_unemp      = "ER22185",
+    wtr_workers_comp = "ER22200",
+    amt_workers_comp = "ER22201",
+    wtr_child_supp = "ER22216",
+    amt_child_supp = "ER22217",
+    health_head    = "ER23009",
+    health_wife    = "ER23136",
+    parents_poor   = "ER23424",
+    race           = "ER23426",
+    couple_status  = "ER24152",
+    needs_standard = "ER24140",
+    rural_urban    = "ER24144",
+    total_income   = "ER24099", # note: Total Income of Last Year <- No Total Income in 03
+    education      = "ER24148",
+    relation       = "ER33703",
+    emp_status     = "ER33712"
+  ),
+
+  
 )
 ```
 
