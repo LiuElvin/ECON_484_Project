@@ -142,8 +142,52 @@ wave_map <- list(
     education      = "ER16516",
     relation       = "ER33503",
     emp_status     = "ER33512"
-  )
+  ),
   # Repeat structural pattern for 2001-2007 blocks...
+  "2001" = list(
+    family_id      = "ER17002",
+    person_id      = "ER33601",
+    state          = "ER17004",
+    age            = "ER17013",
+    sex            = "ER17014",
+    n_children     = "ER17016",
+    age_yng_child  = "ER17017",
+    type_du        = "ER17025",
+    own_rent       = "ER17043",
+    neither_own_rent = "ER17084",
+    food_stamps    = "ER18416",
+    wtr_adc        = "ER18697",
+    amt_adc        = "ER18698",
+    wtr_ssi        = "ER18715",
+    amt_ssi        = "ER18715",
+    wtr_welfare    = "ER18730",
+    amt_welfare    = "ER18731",
+    wtr_va         = "ER18747",
+    amt_va         = "ER18750",
+    wtr_nonva_ret  = "ER18765",
+    amt_nonva_ret  = "ER18766",
+    wtr_annuities  = "ER18781",
+    amt_annuities  = "ER18782",
+    wtr_otr_pen    = "ER18797",
+    amt_otr_pen    = "ER18798",
+    wtr_unemp      = "ER18814",
+    amt_unemp      = "ER18815",
+    wtr_workers_comp = "ER18830",
+    amt_workers_comp = "ER18831",
+    wtr_child_supp = "ER18846",
+    amt_child_supp = "ER18847",
+    health_head    = "ER19612",
+    health_wife    = "ER19720",
+    parents_poor   = "ER19987",
+    race           = "ER19989",
+    couple_status  = "ER20371",
+    needs_standard = "ER20373",
+    rural_urban    = "ER20377",
+    total_income   = "ER20456",
+    education      = "ER20457",
+    relation       = "ER33603",
+    emp_status     = "ER33612"
+  )
 )
 ```
 
