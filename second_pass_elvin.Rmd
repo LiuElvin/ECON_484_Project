@@ -1,0 +1,243 @@
+---
+title: "second_pass_elvin"
+author: "Elvin Liu"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup}
+library(dplyr)
+library(purrr)
+library(tidyr)
+library(labelled)
+```
+
+```{r}
+# map labels from txt to csv
+lines <- readLines("J362221_labels.txt")
+var_lines <- lines[grepl("^ER[0-9A-Z]+\\s+", lines)]
+
+label_df <- data.frame(
+  var   = trimws(sub("^(ER[0-9A-Z]+)\\s+.*$", "\\1", var_lines)),
+  label = trimws(sub("^ER[0-9A-Z]+\\s+(.*?)\\s{2,}\\d{0,2}\\s*$", "\\1", var_lines)),
+  stringsAsFactors = FALSE
+)
+
+df <- read.csv("J362221.csv", stringsAsFactors = FALSE)
+
+for (i in seq_len(nrow(label_df))) {
+  v <- label_df$var[i]
+  if (v %in% names(df)) {
+    var_label(df[[v]]) <- label_df$label[i]
+  }
+}
+
+# get rid of dupe family heads
+df <- df %>%
+  group_by(ER10002) %>%
+  slice(1) %>%
+  ungroup()
+
+# convert NA values for 0, 8, and 9 values for TANF
+df$ER11272[df$ER11272 == 0 | df$ER11272 == 8 | df$ER11272 == 9] <- NA
+
+# remove NA values for TANF
+df <- df[!is.na(df$ER11272), ]
+
+# do the same manually for VA
+# 1-4 are treated as 1, 8 and 9 as VA
+# VA whether received variables
+va_vars <- c(
+  "ER11319", "ER14585", "ER18747", "ER22119",
+  "ER26100", "ER37118", "ER43109"
+)
+
+df[va_vars] <- lapply(df[va_vars], function(x) {
+  x[x %in% c(1,2,3,4)] <- 1
+  x[x %in% c(8,9)] <- NA
+  x
+})
+
+# 1 is Yes, 5 is No, TANF
+df <- df[df$ER11272 == 1 | df$ER11272 == 5,]
+
+# send 999999, 999998, 99999, 99998 to NA
+df[df == 999999 | df == 999998 | df == 99999 | df == 99998] <- NA
+
+# ER41027 <- Total Family Income 2007
+# ER41029 <- Census Needs Standard 2007
+# ER12079 <- TFI 1997
+# ER12220 <- CNS 1997
+
+# calculate 1997 TFI / CNS ratio
+df$income_to_needs_ratio_1997 <- df$ER12079 / df$ER12220
+
+# calculate 2007 TFI / CNS ratio
+df$income_to_needs_ratio_2007 <- df$ER41027 / df$ER41029
+
+# keep only people with 1997 and 2007 ratio
+df <- df %>%
+  filter(!is.na(income_to_needs_ratio_1997) & !is.na(income_to_needs_ratio_2007))
+
+# 233 families who received TANF in 1997 and have both 1997 and 2007 ratio
+# 4844 families who didn't receive TANF in 1997 and have both 1997 and 2007 ratio
+
+# mapping from wide to long
+wave_map <- list(
+  "1997" = list(
+    # Tracking IDs
+    family_id        = "ER10002",
+    person_id        = "ER33401",
+    
+    income_to_needs_ratio = "income_to_needs_ratio_1997",
+    
+    # Demographics & Geography
+    state            = "ER12221",
+    age              = "ER10009",
+    sex              = "ER10010",
+    n_children       = "ER10012",
+    age_yng_child    = "ER10013",
+    race             = "ER11848",
+    education        = "ER12222",
+    couple_status    = "ER12223C",
+    relation         = "ER33403",
+    emp_status       = "ER33411",
+    rural_urban      = "ER12221A",
+    
+    # Housing & Environment
+    type_du          = "ER10017",
+    own_rent         = "ER10035",
+    neither_own_rent = "ER10068",
+    food_stamps      = "ER11065",
+    
+    # Health
+    health_head      = "ER11723",
+    health_wife      = "ER11727",
+    parents_poor     = "ER11846",
+    
+    # Income & Needs
+    total_income     = "ER12079",
+    needs_standard   = "ER12220",
+    
+    # Transfer Income
+    wtr_adc          = "ER11272",
+    amt_adc          = "ER11273",
+    wtr_ssi          = "ER11287",
+    amt_ssi          = "ER11289",
+    wtr_welfare      = "ER11303",
+    amt_welfare      = "ER11304",
+    wtr_va           = "ER11319",
+    amt_va           = "ER11322",
+    wtr_nonva_ret    = "ER11336",
+    amt_nonva_ret    = "ER11337",
+    wtr_annuities    = "ER11351",
+    amt_annuities    = "ER11352",
+    wtr_otr_pen      = "ER11366",
+    amt_otr_pen      = "ER11367",
+    wtr_unemp        = "ER11382",
+    amt_unemp        = "ER11383",
+    wtr_workers_comp = "ER11397",
+    amt_workers_comp = "ER11398",
+    wtr_child_supp   = "ER11412",
+    amt_child_supp   = "ER11413"
+  ),
+  "2007" = list(
+    # Tracking IDs
+    family_id        = "ER36002",
+    person_id        = "ER33901",
+    
+    income_to_needs_ratio = "income_to_needs_ratio_2007",
+    
+    # Demographics & Geography
+    state            = "ER36003",
+    age              = "ER36017",
+    sex              = "ER36018",
+    n_children       = "ER36020",
+    age_yng_child    = "ER36021",
+    race             = "ER40565",
+    education        = "ER41037",
+    couple_status    = "ER41041",
+    relation         = "ER33903",
+    emp_status       = "ER33913",
+    rural_urban      = "ER41033",
+    
+    # Housing & Environment
+    type_du          = "ER36024",
+    own_rent         = "ER36028",
+    neither_own_rent = "ER36075",
+    food_stamps      = "ER36701",
+    
+    # Health
+    health_head      = "ER38202",
+    health_wife      = "ER39299",
+    parents_poor     = "ER37728",
+    
+    # Income & Needs
+    total_income     = "ER41027",
+    needs_standard   = "ER41029",
+    
+    # Transfer Income
+    wtr_adc          = "ER37068",
+    amt_adc          = "ER37069",
+    wtr_ssi          = "ER37084",
+    amt_ssi          = "ER37086",
+    wtr_welfare      = "ER37101",
+    amt_welfare      = "ER37102",
+    wtr_va           = "ER37118",
+    amt_va           = "ER37119",
+    wtr_nonva_ret    = "ER37134",
+    amt_nonva_ret    = "ER37135",
+    wtr_annuities    = "ER37150",
+    amt_annuities    = "ER37151",
+    wtr_otr_pen      = "ER37166",
+    amt_otr_pen      = "ER37167",
+    wtr_unemp        = "ER37183",
+    amt_unemp        = "ER37184",
+    wtr_workers_comp = "ER37199",
+    amt_workers_comp = "ER37200",
+    wtr_child_supp   = "ER37215",
+    amt_child_supp   = "ER37216"
+  )
+)
+
+# map from wide to long
+df_long <- names(wave_map) %>%
+  map_dfr(function(year_str) {
+    
+    year_mapping <- wave_map[[year_str]]
+    
+    # Remove person_id and family_id from the loop mapping to prevent tracking splits
+    year_mapping$person_id <- NULL
+    year_mapping$family_id <- NULL
+    
+    rename_vec <- unlist(year_mapping)
+    rename_vec <- rename_vec[rename_vec %in% names(df)]
+    select_vec <- setNames(rename_vec, names(rename_vec))
+    
+    # Extract the correct interview number code before stepping into mutate
+    current_wave_num <- if (year_str == "1997") df$ER10002 else df$ER36002
+    
+    df %>%
+      select(all_of(select_vec)) %>%
+      mutate(
+        year = as.integer(year_str),
+        # Anchor both waves to the unique 1997 Family ID row number
+        unique_family_id = df$ER10002,
+        # Assign the pre-extracted vector safely
+        wave_interview_num = current_wave_num
+      )
+  })
+
+# Move your unified tracking key and year metrics to the front
+df_long <- df_long %>%
+  select(unique_family_id, wave_interview_num, year, income_to_needs_ratio, everything())
+```
+
+```{r}
+# Verify every panel tracker contains exactly 2 observations
+panel_counts <- df_long %>% 
+  count(unique_family_id)
+
+table(panel_counts$n) 
+# This should show 100% of your records sit in the "2" category!
+```
