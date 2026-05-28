@@ -1,5 +1,5 @@
 ---
-title: "second_pass_elvin"
+title: "third_pass_elvin"
 author: "Elvin Liu"
 date: "`r Sys.Date()`"
 output: pdf_document
@@ -9,6 +9,7 @@ output: pdf_document
 library(dplyr)
 library(purrr)
 library(tidyr)
+library(ggplot2)
 library(labelled)
 ```
 
@@ -232,9 +233,18 @@ df_long <- names(wave_map) %>%
       )
   })
 
+# Create a clean, time-invariant mapping of 1997 TANF status using your original df
+tanf_status_map <- df %>%
+  mutate(tanf_status = if_else(ER11272 == 1, "TANF Recipient", "Control Group")) %>%
+  select(unique_family_id = ER10002, tanf_status)
+
+# Merge this structural indicator back into your long-form panel
+df_long <- df_long %>%
+  left_join(tanf_status_map, by = "unique_family_id")
+
 # Move your unified tracking key and year metrics to the front
 df_long <- df_long %>%
-  select(unique_family_id, wave_interview_num, year, income_to_needs_ratio, everything())
+  select(unique_family_id, wave_interview_num, year, tanf_status, income_to_needs_ratio, everything())
 ```
 
 ```{r}
@@ -244,4 +254,8 @@ panel_counts <- df_long %>%
 
 table(panel_counts$n) 
 # This should show 100% of your records sit in the "2" category!
+```
+
+```{r}
+# graphs of data!
 ```
