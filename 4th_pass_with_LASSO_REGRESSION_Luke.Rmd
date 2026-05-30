@@ -1,0 +1,670 @@
+---
+title: "third_pass_elvin"
+author: "Elvin Liu"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+```{r setup}
+library(dplyr)
+library(purrr)
+library(tidyr)
+library(ggplot2)
+library(labelled)
+library(Matrix)
+library(glmnet)
+```
+
+```{r}
+# map labels from txt to csv
+lines <- readLines("J362221_labels.txt")
+var_lines <- lines[grepl("^ER[0-9A-Z]+\\s+", lines)]
+
+label_df <- data.frame(
+  var   = trimws(sub("^(ER[0-9A-Z]+)\\s+.*$", "\\1", var_lines)),
+  label = trimws(sub("^ER[0-9A-Z]+\\s+(.*?)\\s{2,}\\d{0,2}\\s*$", "\\1", var_lines)),
+  stringsAsFactors = FALSE
+)
+
+df <- read.csv("J362221.csv", stringsAsFactors = FALSE)
+
+for (i in seq_len(nrow(label_df))) {
+  v <- label_df$var[i]
+  if (v %in% names(df)) {
+    var_label(df[[v]]) <- label_df$label[i]
+  }
+}
+
+# get rid of dupe family heads
+df <- df %>%
+  group_by(ER10002) %>%
+  slice(1) %>%
+  ungroup()
+
+# convert NA values for 0, 8, and 9 values for TANF
+df$ER11272[df$ER11272 == 0 | df$ER11272 == 8 | df$ER11272 == 9] <- NA
+
+# remove NA values for TANF
+df <- df[!is.na(df$ER11272), ]
+
+# do the same manually for VA
+# 1-4 are treated as 1, 8 and 9 as VA
+# VA whether received variables
+va_vars <- c(
+  "ER11319", "ER14585", "ER18747", "ER22119",
+  "ER26100", "ER37118", "ER43109"
+)
+
+df[va_vars] <- lapply(df[va_vars], function(x) {
+  x[x %in% c(1,2,3,4)] <- 1
+  x[x %in% c(8,9)] <- NA
+  x
+})
+
+# 1 is Yes, 5 is No, TANF
+df <- df[df$ER11272 == 1 | df$ER11272 == 5,]
+
+# send 999999, 999998, 99999, 99998 to NA
+df[df == 999999 | df == 999998 | df == 99999 | df == 99998] <- NA
+
+# ER41027 <- Total Family Income 2007
+# ER41029 <- Census Needs Standard 2007
+# ER12079 <- TFI 1997
+# ER12220 <- CNS 1997
+
+# calculate 1997 TFI / CNS ratio
+df$income_to_needs_ratio_1997 <- df$ER12079 / df$ER12220
+
+# calculate 2007 TFI / CNS ratio
+df$income_to_needs_ratio_2007 <- df$ER41027 / df$ER41029
+
+# keep only people with 1997 and 2007 ratio
+df <- df %>%
+  filter(!is.na(income_to_needs_ratio_1997) & !is.na(income_to_needs_ratio_2007))
+
+# kick out TANF non-recipients with too high of income or no kids or too old
+income_ratio_threshold <- quantile(df[df$ER11272 == 1,]$income_to_needs_ratio_1997, 0.90) # 95th percentile income of TANF recipients
+df <- df[(df$ER11272 == 5 & df$income_to_needs_ratio_1997 <= income_ratio_threshold & df$ER10012 >= 1 & df$ER10009 < 65) | df$ER11272 == 1,]
+
+# 233 families who received TANF in 1997 and have both 1997 and 2007 ratio
+# 609 families who didn't receive TANF in 1997 and have both 1997 and 2007 ratio
+
+# mapping from wide to long
+wave_map <- list(
+  "1997" = list(
+    # Tracking IDs
+    family_id        = "ER10002",
+    person_id        = "ER33401",
+    
+    income_to_needs_ratio = "income_to_needs_ratio_1997",
+    
+    # Demographics & Geography
+    state            = "ER12221",
+    age              = "ER10009",
+    sex              = "ER10010",
+    n_children       = "ER10012",
+    age_yng_child    = "ER10013",
+    race             = "ER11848",
+    education        = "ER12222",
+    couple_status    = "ER12223C",
+    relation         = "ER33403",
+    emp_status       = "ER33411",
+    rural_urban      = "ER12221A",
+    
+    # Housing & Environment
+    type_du          = "ER10017",
+    own_rent         = "ER10035",
+    neither_own_rent = "ER10068",
+    food_stamps      = "ER11065",
+    
+    # Health
+    health_head      = "ER11723",
+    health_wife      = "ER11727",
+    parents_poor     = "ER11846",
+    
+    # Income & Needs
+    total_income     = "ER12079",
+    needs_standard   = "ER12220",
+    
+    # Transfer Income
+    wtr_adc          = "ER11272",
+    amt_adc          = "ER11273",
+    wtr_ssi          = "ER11287",
+    amt_ssi          = "ER11289",
+    wtr_welfare      = "ER11303",
+    amt_welfare      = "ER11304",
+    wtr_va           = "ER11319",
+    amt_va           = "ER11322",
+    wtr_nonva_ret    = "ER11336",
+    amt_nonva_ret    = "ER11337",
+    wtr_annuities    = "ER11351",
+    amt_annuities    = "ER11352",
+    wtr_otr_pen      = "ER11366",
+    amt_otr_pen      = "ER11367",
+    wtr_unemp        = "ER11382",
+    amt_unemp        = "ER11383",
+    wtr_workers_comp = "ER11397",
+    amt_workers_comp = "ER11398",
+    wtr_child_supp   = "ER11412",
+    amt_child_supp   = "ER11413"
+  ),
+  "2007" = list(
+    # Tracking IDs
+    family_id        = "ER36002",
+    person_id        = "ER33901",
+    
+    income_to_needs_ratio = "income_to_needs_ratio_2007",
+    
+    # Demographics & Geography
+    state            = "ER36003",
+    age              = "ER36017",
+    sex              = "ER36018",
+    n_children       = "ER36020",
+    age_yng_child    = "ER36021",
+    race             = "ER40565",
+    education        = "ER41037",
+    couple_status    = "ER41041",
+    relation         = "ER33903",
+    emp_status       = "ER33913",
+    rural_urban      = "ER41033",
+    
+    # Housing & Environment
+    type_du          = "ER36024",
+    own_rent         = "ER36028",
+    neither_own_rent = "ER36075",
+    food_stamps      = "ER36701",
+    
+    # Health
+    health_head      = "ER38202",
+    health_wife      = "ER39299",
+    parents_poor     = "ER37728",
+    
+    # Income & Needs
+    total_income     = "ER41027",
+    needs_standard   = "ER41029",
+    
+    # Transfer Income
+    wtr_adc          = "ER37068",
+    amt_adc          = "ER37069",
+    wtr_ssi          = "ER37084",
+    amt_ssi          = "ER37086",
+    wtr_welfare      = "ER37101",
+    amt_welfare      = "ER37102",
+    wtr_va           = "ER37118",
+    amt_va           = "ER37119",
+    wtr_nonva_ret    = "ER37134",
+    amt_nonva_ret    = "ER37135",
+    wtr_annuities    = "ER37150",
+    amt_annuities    = "ER37151",
+    wtr_otr_pen      = "ER37166",
+    amt_otr_pen      = "ER37167",
+    wtr_unemp        = "ER37183",
+    amt_unemp        = "ER37184",
+    wtr_workers_comp = "ER37199",
+    amt_workers_comp = "ER37200",
+    wtr_child_supp   = "ER37215",
+    amt_child_supp   = "ER37216"
+  )
+)
+
+# map from wide to long
+df_long <- names(wave_map) %>%
+  map_dfr(function(year_str) {
+    
+    year_mapping <- wave_map[[year_str]]
+    
+    # Remove person_id and family_id from the loop mapping to prevent tracking splits
+    year_mapping$person_id <- NULL
+    year_mapping$family_id <- NULL
+    
+    rename_vec <- unlist(year_mapping)
+    rename_vec <- rename_vec[rename_vec %in% names(df)]
+    select_vec <- setNames(rename_vec, names(rename_vec))
+    
+    # Extract the correct interview number code before stepping into mutate
+    current_wave_num <- if (year_str == "1997") df$ER10002 else df$ER36002
+    
+    df %>%
+      select(all_of(select_vec)) %>%
+      mutate(
+        year = as.integer(year_str),
+        # Anchor both waves to the unique 1997 Family ID row number
+        unique_family_id = df$ER10002,
+        # Assign the pre-extracted vector safely
+        wave_interview_num = current_wave_num
+      )
+  })
+
+# Create a clean, time-invariant mapping of 1997 TANF status using your original df
+tanf_status_map <- df %>%
+  mutate(tanf_status = if_else(ER11272 == 1, "TANF Recipient", "Control Group")) %>%
+  select(unique_family_id = ER10002, tanf_status)
+
+# Merge this structural indicator back into your long-form panel
+df_long <- df_long %>%
+  left_join(tanf_status_map, by = "unique_family_id")
+
+# Move your unified tracking key and year metrics to the front
+df_long <- df_long %>%
+  select(unique_family_id, wave_interview_num, year, tanf_status, income_to_needs_ratio, everything())
+```
+
+```{r}
+# Verify every panel tracker contains exactly 2 observations
+panel_counts <- df_long %>% 
+  count(unique_family_id)
+
+table(panel_counts$n) 
+# This should show 100% of your records sit in the "2" category!
+```
+
+```{r}
+#Initial Visualization: 2 line plot of group means over time
+
+plot_data <- df_long %>%
+  group_by(year, tanf_status) %>%
+  summarize(
+    mean_ratio = mean(income_to_needs_ratio, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+ggplot(plot_data,
+       aes(x = year,
+           y = mean_ratio,
+           color = tanf_status,
+           group = tanf_status)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(linewidth = 3) +
+  labs(
+    title = "Income-to-Needs Ratio by TANF Status",
+    x = "Year",
+    y = "Income-to-Needs Ratio",
+    color = ""
+  ) +
+  theme_minimal()
+
+```
+
+```{r}
+#Model 1: Difference in Difference Regression for change in Income-Needs ratio for Tanf and Non-Tanf Recipients (No Controls)
+
+#Create Post indicator to verify which year the family being observed is in 
+df_long$post <- ifelse(df_long$year == 2007, 1, 0)
+
+#Ensure that TANF status is a factor
+df_long$tanf_status <- factor(df_long$tanf_status)
+levels(df_long$tanf_status)
+
+#Run the DiD Regression: 
+model1 <- lm(
+  income_to_needs_ratio ~
+    tanf_status * post,
+  data = df_long
+)
+
+summary(model1)
+
+
+```
+$$
+IncomeNeed_{it}
+=
+\beta_0
++
+\beta_1 TANF_i
++
+\beta_2 Post_t
++
+\beta_3 (TANF_i \times Post_t)
++
+\varepsilon_{it}
+$$ 
+The primary coefficient of interest is $\beta_3$, which measures whether TANF recipients experienced a different change in income-to-needs ratios between 1997 and 2007 relative to the control group. From this result, we can see that TANF recipients started siginificantly poorer than the control group, with a Income to Needs Ratio .26123 Less than the control group. The control group improved their ratio by 1.25172 over the time period measured whereas TANF recipients improved their Income to Needs Ratio by .55706 points less than those in the control groups. All results are statistically significant. 
+
+```{r}
+#Model 2: Run a DiD regression controlling for differences in age, education, race, family size, types of welfare recieved, etc. 
+
+#Data Cleaning On Control Variables. Get rid of 99 values for education, get red of 7, 8, 9 values for race, as these are NA, and for ease of LASSO in next step convert welfare variables to Binary 1=Yes and 0=No, make sure 8, 9, 0 values are changed to NA for these welfare variables. 
+
+# Education: 99 = DK/NA
+df_long$education[df_long$education == 99] <- NA
+
+# Race: 8 and 9 = DK/NA
+# Keep 1-7 as valid race categories
+df_long$race <- as.character(df_long$race)
+
+df_long$race[df_long$race %in% c("0", "8", "9")] <- NA
+
+df_long$race <- factor(df_long$race)
+
+# Safer yes/no cleaner
+# Raw codebook: 1 = Yes, 5 = No, 0/8/9 = missing
+# If already cleaned: 1 = Yes, 0 = No
+clean_yesno_safe <- function(x) {
+  x <- as.character(x)
+
+  x[x == "1"] <- "1"
+  x[x == "5"] <- "0"
+  x[x %in% c("8", "9")] <- NA
+
+  as.numeric(x)
+}
+
+binary_vars <- c(
+  "wtr_ssi",
+  "wtr_welfare",
+  "wtr_unemp",
+  "wtr_child_supp",
+  "wtr_workers_comp",
+  "wtr_va"
+)
+
+df_long[binary_vars] <- lapply(df_long[binary_vars], clean_yesno_safe)
+
+# Check cleaning
+summary(df_long[, c(
+  "age",
+  "education",
+  "race",
+  "n_children",
+  binary_vars
+)])
+
+sapply(df_long[binary_vars], table, useNA = "always")
+table(df_long$race, useNA = "always")
+```
+```{r}
+#Run Model 2 with the cleaned data and binary values
+model2 <- lm(
+  income_to_needs_ratio ~
+    tanf_status * post +
+    age +
+    education +
+    race +
+    n_children +
+    wtr_ssi +
+    wtr_welfare +
+    wtr_unemp +
+    wtr_child_supp +
+    wtr_workers_comp +
+    wtr_va,
+  data = df_long
+)
+
+summary(model2)
+nobs(model2)
+```
+$$
+IncomeNeed_{it}
+=
+\beta_0
++
+\beta_1 TANF_i
++
+\beta_2 Post_t
++
+\beta_3 (TANF_i \times Post_t)
++
+\beta_4 Age_i
++
+\beta_5 Education_i
++
+\beta_6 Children_i
++
+\beta_7 SSI_i
++
+\beta_8 Welfare_i
++
+\beta_9 Unemp_i
++
+\beta_{10} ChildSupp_i
++
+\beta_{11} WorkersComp_i
++
+\beta_{12} VA_i
++
+\sum_r \gamma_r Race_{ir}
++
+\varepsilon_{it}
+$$
+After controlling for age, education, race, number of children, SSI, welfare income, unemployment compensation, child support, workers compensation, and VA benefits, TANF recipients experienced an increase in income-to-needs ratio that was approximately 0.56 smaller than the increase experienced by comparable nonrecipients between 1997 and 2007. The $\beta_3$ coefficient only changed by about .00078 which is a negligible difference. This indicates that our selection of the control group is very robust, and that the negative TANF effect is being significantly effected by the control variables selected. From looking at the P-values of the control variables, education, number of children, SSI, and Race2 (African American Individuals). 
+
+```{r}
+#Model 3: Now controlling for 16 variables, use a double LASSO to verify the Robustness of the Model. This will use the data to predict which of the 16 possible co-founding variables have the largest effect on the change of the income to needs ratio between TANF recipients and NON-TANF recipients. 
+
+# Model 3: Double LASSO robustness check
+
+# Check variables for data cleaning
+vars_to_check <- c(
+  "age",
+  "education",
+  "race",
+  "n_children",
+  "age_yng_child",
+  "couple_status",
+  "emp_status",
+  "food_stamps",
+  "health_head",
+  "parents_poor",
+  "wtr_ssi",
+  "wtr_welfare",
+  "wtr_unemp",
+  "wtr_child_supp",
+  "wtr_workers_comp",
+  "wtr_va"
+)
+
+lapply(df_long[vars_to_check], table, useNA = "always")
+
+
+# Additional cleaning for Model 3 only
+
+# Couple status: categorical
+df_long$couple_status <- factor(df_long$couple_status)
+
+# Employment status: 8 = Other, 9 = DK/NA
+df_long$emp_status[df_long$emp_status %in% c(8, 9)] <- NA
+df_long$emp_status <- factor(df_long$emp_status)
+
+# Food stamps: 0 = no food stamps, 1-7 = number of family members covered, 8/9 = DK/NA
+df_long$food_stamps[df_long$food_stamps %in% c(8, 9)] <- NA
+
+# Health status of head: 1 = Excellent ... 5 = Poor, 8/9 = DK/NA
+df_long$health_head[df_long$health_head %in% c(8, 9)] <- NA
+
+# Parents poor: 1 = Poor, 3 = Average, 5 = Well-off, 0/8/9 = invalid or DK/NA
+df_long$parents_poor[df_long$parents_poor %in% c(0, 8, 9)] <- NA
+
+# Check cleaned Model 3 variables
+lapply(df_long[vars_to_check], table, useNA = "always")
+```
+```{r}
+#Model 3: Now do the double LASSO: 
+
+#Create a vector of all the con founders
+candidate_controls <- c(
+  "age",
+  "education",
+  "race",
+  "n_children",
+  "age_yng_child",
+  "couple_status",
+  "emp_status",
+  "food_stamps",
+  "health_head",
+  "parents_poor",
+  "wtr_ssi",
+  "wtr_welfare",
+  "wtr_unemp",
+  "wtr_child_supp",
+  "wtr_workers_comp",
+  "wtr_va"
+)
+
+#Give Numeric Treatment indicator for Double Lasso
+df_lasso <- df_long
+
+df_lasso$treat <- ifelse(
+  df_lasso$tanf_status == "TANF Recipient",
+  1,
+  0
+)
+
+#Remove missing variables from data
+lasso_data <- df_lasso[, c(
+  "income_to_needs_ratio",
+  "treat",
+  "post",
+  "age",
+  "education",
+  "race",
+  "n_children",
+  "age_yng_child",
+  "couple_status",
+  "emp_status",
+  "food_stamps",
+  "health_head",
+  "parents_poor",
+  "wtr_ssi",
+  "wtr_welfare",
+  "wtr_unemp",
+  "wtr_child_supp",
+  "wtr_workers_comp",
+  "wtr_va"
+)]
+
+lasso_data <- na.omit(lasso_data)
+
+#Create Variables for LASSO
+Y <- lasso_data$income_to_needs_ratio
+
+D <- lasso_data$treat
+
+#Factor variables converted to Dummy Variables for Ease of the LASSO
+X <- model.matrix(
+  ~ age +
+    education +
+    race +
+    n_children +
+    age_yng_child +
+    couple_status +
+    emp_status +
+    food_stamps +
+    health_head +
+    parents_poor +
+    wtr_ssi +
+    wtr_welfare +
+    wtr_unemp +
+    wtr_child_supp +
+    wtr_workers_comp +
+    wtr_va,
+  data = lasso_data
+)[,-1]
+```
+
+```{r}
+set.seed(424)
+#First Lasso: which variables are important for predicting change in income to needs ratio
+cv_y <- cv.glmnet(
+  X,
+  Y,
+  alpha = 1
+)
+
+#Second Lasso: which variables are important in predicting who recieves TANF
+cv_d <- cv.glmnet(
+  X,
+  D,
+  alpha = 1,
+  family = "binomial"
+)
+
+#Extract Selected variables in the First LASSO
+selected_y <- rownames(coef(cv_y, s = "lambda.min"))[
+  coef(cv_y, s = "lambda.min")[,1] != 0
+]
+
+#Extract Selected variables in the Second LASSO
+selected_d <- rownames(coef(cv_d, s = "lambda.min"))[
+  coef(cv_d, s = "lambda.min")[,1] != 0
+]
+
+# Create a Union of the Selected Variables
+selected_controls <- union(selected_y, selected_d)
+
+selected_controls <- setdiff(
+  selected_controls,
+  "(Intercept)"
+)
+
+# Show selected dummy-variable columns
+selected_controls
+
+# Convert dummy variables back to original variables
+selected_original <- unique(
+  gsub("[0-9]+$", "", selected_controls)
+)
+
+selected_original
+
+# Number of selected columns
+length(selected_controls)
+
+# Percent of columns kept
+percent_kept <- length(selected_controls) / ncol(X)
+percent_kept
+
+```
+```{r}
+#Final Step: create the final regression using only LASSO selected controls
+# Create formula using selected controls
+
+formula_lasso <- as.formula(
+  paste(
+    "income_to_needs_ratio ~ treat * post +",
+    paste(selected_original, collapse = " + ")
+  )
+)
+
+formula_lasso
+```
+
+```{r}
+#Run the Regresion
+model3 <- lm(
+  formula_lasso,
+  data = lasso_data
+)
+
+summary(model3)
+```
+"TANF recipients experienced a 0.89 lower change in income-to-needs ratios between 1997 and 2007 relative to comparable nonrecipients, conditional on the selected controls."
+
+```{r}
+#Run Model 2 on the LASSO sample to check if the different in treat:post is due to lost observations
+model2_same_sample <- lm(
+  income_to_needs_ratio ~
+    treat * post +
+    age +
+    education +
+    race +
+    n_children +
+    wtr_ssi +
+    wtr_welfare +
+    wtr_unemp +
+    wtr_child_supp +
+    wtr_workers_comp +
+    wtr_va,
+  data = lasso_data
+)
+
+summary(model2_same_sample)
+```
+From these regressions, we notice that in the DOUBLE LASSO model, the coeeficient of interest $\beta_3 changes from -.557 to -.89. We run a test on the same observations from the LASSO by using model 2, and the coeeficient is -.58. This indicates that the jump in the coeeficient to -.89 in the double LASSO model can largely be explained by added variables that the LASSO includes such as employment status, marital status, health, food stamp usage, and child economic background. 
+
+Across all specifications, TANF recipients experienced significantly smaller improvements in income-to-needs ratios between 1997 and 2007 than comparable nonrecipients. The estimated effect ranged from approximately -0.56 to -0.89 depending on the specification. The consistency of the negative treatment effect across baseline, controlled, and Double LASSO models suggests that the result is not driven by a particular choice of controls.
+
+
+```{r}
+# graphs of data!
+```
